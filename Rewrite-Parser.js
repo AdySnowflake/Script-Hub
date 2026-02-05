@@ -2923,6 +2923,10 @@ function generateRule(node, platform, flags = {}) {
       supportsPreMatching: false,
       supportsSrc: false,
       rejectPolicyRegex: /^REJECT(-[A-Z]+)*$/,
+      ruleTypeMapping: {
+        'DST-PORT': 'DEST-PORT',
+        'NETWORK': 'PROTOCOL',
+      },
     },
   }
 
@@ -3067,10 +3071,16 @@ function generateRule(node, platform, flags = {}) {
 
       return result
     } else if (node.type === 'VALUE') {
-      if (['URL-REGEX', 'USER-AGENT'].includes(node.operator) && !/^['"].*['"]$/.test(node.value)) {
+      // 根据目标平台映射规则类型
+      let operator = node.operator
+      if (features.ruleTypeMapping && features.ruleTypeMapping[operator]) {
+        operator = features.ruleTypeMapping[operator]
+      }
+      
+      if (['URL-REGEX', 'USER-AGENT'].includes(operator) && !/^['"].*['"]$/.test(node.value)) {
         node.value = `"${node.value}"`
       }
-      let result = `${node.operator},${node.value}`
+      let result = `${operator},${node.value}`
 
       if (node.flags) {
         let flagStrings = []
@@ -3078,8 +3088,8 @@ function generateRule(node, platform, flags = {}) {
         for (const [flag, isSet] of Object.entries(node.flags)) {
           if (isSet) {
             const supportedTypes = FLAG_SUPPORTED_TYPES[flag]
-            if (!supportedTypes.includes(node.operator)) {
-              console.log(`标志 ${flag} 不支持应用于规则类型 ${node.operator}`)
+            if (!supportedTypes.includes(operator)) {
+              console.log(`标志 ${flag} 不支持应用于规则类型 ${operator}`)
             } else {
               // 添加标志到 flagStrings
               switch (flag) {
