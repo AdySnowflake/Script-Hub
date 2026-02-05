@@ -3122,7 +3122,7 @@ function generateRule(node, platform, flags = {}) {
       // pre-matching 可以附加到逻辑运算符上，已在 LOGICAL 节点处理
       result = `(${result})`
 
-      // console.log(`Processed VALUE node: ${node.operator}, result: ${result}`)
+      // console.log(`Processed VALUE node: ${operator}, result: ${result}`)
 
       return result
     } else {
