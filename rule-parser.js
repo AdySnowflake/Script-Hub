@@ -231,12 +231,20 @@ let ruleValue //规则
     } else if (isLooniOS) {
       if (x.match(/^;#/)) {
         outRules.push(x.replace(/^;#/, '').replace(/^HO-ST/i, 'HOST'))
-      } else if (x.match(/^(HO-ST|DST-PORT|PROTOCOL|PROCESS-NAME|OR|AND|NOT)/i)) {
+      } else if (x.match(/^(HO-ST|PROCESS-NAME)/i)) {
         other.push(x.replace(/^HO-ST/i, 'HOST'))
+      } else if (x.match(/^(OR|AND|NOT)/i)) {
+        // Transform nested rule types in logical operators for Loon
+        let transformedRule = x.replace(/\(DST-PORT,/gi, '(DEST-PORT,').replace(/\(NETWORK,/gi, '(PROTOCOL,')
+        ruleSet.push(transformedRule)
       } else if (x != '') {
         noResolve = x.replace(/\x20/g, '').match(/,no-resolve/i) ? ',no-resolve' : ''
 
         ruleType = x.split(/ *, */)[0].toUpperCase()
+
+        // Add Clash → Loon type mapping
+        if (ruleType === 'DST-PORT') ruleType = 'DEST-PORT'
+        if (ruleType === 'NETWORK') ruleType = 'PROTOCOL'
 
         ruleValue = x.split(/ *, */)[1]
 
