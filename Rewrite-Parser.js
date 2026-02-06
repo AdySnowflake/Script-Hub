@@ -2946,6 +2946,8 @@ function generateRule(node, platform, flags = {}) {
       'IP-ASN',
       'SUBNET',
       'DEST-PORT',
+      'DST-PORT',
+      'NETWORK',
       'SRC-PORT',
       'SRC-IP',
       'RULE-SET',
