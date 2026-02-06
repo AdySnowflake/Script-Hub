@@ -2932,7 +2932,7 @@ function generateRule(node, platform, flags = {}) {
 
   const FLAG_SUPPORTED_TYPES = {
     extendedMatching: ['RULE-SET', 'DOMAIN-SET', 'DOMAIN-KEYWORD', 'DOMAIN-SUFFIX', 'DOMAIN', 'URL-REGEX'],
-    noResolve: ['IP-CIDR', 'IP-CIDR6', 'GEOIP', 'IP-ASN', 'RULE-SET', 'NETWORK'],
+    noResolve: ['IP-CIDR', 'IP-CIDR6', 'GEOIP', 'IP-ASN', 'RULE-SET'],
     src: ['IP-CIDR', 'IP-CIDR6', 'GEOIP', 'IP-ASN', 'IP-SUFFIX'],
     preMatching: [
       'DOMAIN',
@@ -2946,11 +2946,9 @@ function generateRule(node, platform, flags = {}) {
       'IP-ASN',
       'SUBNET',
       'DEST-PORT',
-      'DST-PORT',
       'SRC-PORT',
       'SRC-IP',
       'RULE-SET',
-      'NETWORK',
 
       'AND',
       'OR',
